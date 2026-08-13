@@ -4,127 +4,98 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sana Özel...</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;1,400&family=Montserrat:wght@300;400&display=swap" rel="stylesheet">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { 
-            background: #0d0d0d; 
+            background: radial-gradient(circle at center, #1a1a1a 0%, #000000 100%); 
             color: #d4af37; 
-            font-family: 'Georgia', serif; 
+            font-family: 'Montserrat', sans-serif; 
             height: 100vh; 
             display: flex; 
             align-items: center; 
             justify-content: center; 
+            overflow: hidden;
         }
         
         #overlay { 
-            position: fixed; 
-            top: 0; 
-            left: 0; 
-            width: 100%; 
-            height: 100%; 
-            background: #0d0d0d; 
-            display: flex; 
-            flex-direction: column; 
-            align-items: center; 
-            justify-content: center; 
-            z-index: 100; 
-            text-align: center; 
-            padding: 20px; 
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; 
+            display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 100; 
         }
         
-        #mainContent { 
-            display: none; 
-            text-align: center; 
-            max-width: 600px; 
-            padding: 20px; 
+        #mainContent { display: none; text-align: center; max-width: 500px; padding: 20px; animation: fadeIn 2s; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        
+        .poem-text { font-family: 'Playfair Display', serif; font-size: 1.5rem; font-style: italic; margin: 30px 0; line-height: 1.6; color: #fff; }
+        
+        .btn-main { 
+            background: transparent; color: #fff; border: 1px solid #d4af37; 
+            padding: 15px 40px; cursor: pointer; border-radius: 2px; 
+            font-size: 1rem; letter-spacing: 2px; text-transform: uppercase; transition: 0.5s; 
         }
-        .poem-text { 
-            font-size: 1.4rem; 
-            font-style: italic; 
-            margin-bottom: 25px; 
-            line-height: 1.7; 
-            color: #f5f5f5; 
+        .btn-main:hover { background: #d4af37; color: #000; }
+        
+        .btn-small { 
+            background: none; border: 1px solid #555; color: #aaa; 
+            padding: 10px 20px; cursor: pointer; border-radius: 2px; 
+            font-size: 0.8rem; margin: 5px; transition: 0.3s;
         }
-        .button-group {
-            display: flex;
-            gap: 10px;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-        button { 
-            background: transparent; 
-            color: #d4af37; 
-            border: 1px solid #d4af37; 
-            padding: 12px 25px; 
-            cursor: pointer; 
-            border-radius: 50px; 
-            font-size: 0.95rem; 
-            transition: 0.3s; 
-        }
-        button:hover { 
-            background: #d4af37; 
-            color: #0d0d0d; 
-        }
+        .btn-small:hover { border-color: #d4af37; color: #d4af37; }
     </style>
 </head>
 <body>
 
-    <!-- GİRİŞ EKRANI -->
     <div id="overlay">
-        <h1 style="margin-bottom:20px;">Sana Özel Bir An...</h1>
-        <p style="color: #aaa; margin-bottom: 25px;">Sana söylemek istediklerim var...</p>
-        <button onclick="startExperience()">🎙️ Dinlemek İçin Dokun</button>
+        <h1 style="font-family: 'Playfair Display', serif; font-size: 1.5rem; letter-spacing: 5px; margin-bottom: 20px;">SANA ÖZEL</h1>
+        <button class="btn-main" onclick="startExperience()">Dinlemek İçin Dokun</button>
     </div>
 
-    <!-- ANA EKRAN -->
     <div id="mainContent">
-        <h1 style="font-family: cursive; margin-bottom: 30px;">Bir Ses, Bir Pişmanlık...</h1>
+        <h1 style="font-size: 1.2rem; letter-spacing: 3px; color: #d4af37;">BİR AN...</h1>
         <div id="poemDisplay" class="poem-text">"Sana bakmak bütün haftanın yorgunluğunu almak gibi..."</div>
         
-        <div class="button-group">
-            <button onclick="changePoem()">Başka Şiire Geç 📜</button>
-            <button id="toggleAudioBtn" onclick="toggleAudio()">🔊 Sesi Durdur</button>
+        <div>
+            <button class="btn-small" onclick="changePoem()">Başka Şiire Geç</button>
+            <button class="btn-small" onclick="toggleAudio()" id="btnAudio">Sesi Durdur</button>
         </div>
     </div>
 
-    <!-- SES DOSYASI -->
+    <!-- DOSYA ADI SES.MP3 OLARAK BURADA TANIMLI -->
     <audio id="audio" loop src="ses.mp3"></audio>
 
     <script>
         const poems = [
             "Sana bakmak bütün haftanın yorgunluğunu almak gibi.",
-            "Bir keman sesinde kaybolmak gibi seni sevmek, ve unutmak geri kalan her şeyi...",
-            "Gece usulca yaklaşır, pişmanlıklar birikir. Anlarsın ki eksik kalan ne varsa dünyada, aslında senin o dokunduğun tellerdedir.",
+            "Bir keman sesinde kaybolmak gibi seni sevmek...",
+            "Gece usulca yaklaşır, pişmanlıklar birikir. Anlarsın ki eksik kalan ne varsa dünyada, senin dokunduğun tellerdedir.",
             "Ben seni unutmak için sevseydim, sana olan sevgimi kalbime gömerdim.",
             "Bütün ince şeyler kısalıyor, geç kalındı sanki bir şeylere."
         ];
 
         const audio = document.getElementById('audio');
+        const btnAudio = document.getElementById('btnAudio');
 
         function startExperience() {
-            document.getElementById('overlay').style.display = 'none';
-            document.getElementById('mainContent').style.display = 'block';
-            
-            // Sesi 10. saniyeden başlatır (İstediğin saniyeye göre değiştirebilirsin)
-            audio.currentTime = 10; 
-            audio.play();
+            document.getElementById('overlay').style.opacity = "0";
+            setTimeout(() => {
+                document.getElementById('overlay').style.display = 'none';
+                document.getElementById('mainContent').style.display = 'block';
+                audio.play();
+            }, 500);
         }
 
         function changePoem() {
             const display = document.getElementById('poemDisplay');
-            let randomPoem = poems[Math.floor(Math.random() * poems.length)];
-            display.innerText = `"${randomPoem}"`;
+            display.innerText = `"${poems[Math.floor(Math.random() * poems.length)]}"`;
         }
 
-        // SESİ AÇMA / KAPAMA FONKSİYONU
         function toggleAudio() {
-            const btn = document.getElementById('toggleAudioBtn');
             if (audio.paused) {
                 audio.play();
-                btn.innerText = "🔊 Sesi Durdur";
+                btnAudio.innerText = "Sesi Durdur";
             } else {
                 audio.pause();
-                btn.innerText = "🔇 Sesi Başlat";
+                btnAudio.innerText = "Sesi Başlat";
             }
         }
     </script>
