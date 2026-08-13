@@ -14,8 +14,8 @@
             height: 100vh; 
             display: flex; 
             align-items: center; 
-            justify-content: center; 
-            overflow: hidden;
+            justify-content: center;
+            overflow: auto; /* Yazı uzunsa kaydırma yapabilsin diye */
         }
         
         #overlay { 
@@ -23,10 +23,38 @@
             display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 100; 
         }
         
-        #mainContent { display: none; text-align: center; max-width: 500px; padding: 20px; animation: fadeIn 2s; }
+        /* Genişliği artırdım ve daha ferah yaptım */
+        #mainContent { 
+            display: none; text-align: center; max-width: 800px; width: 90%; padding: 40px; 
+            animation: fadeIn 2s; 
+        }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
         
-        .poem-text { font-family: 'Playfair Display', serif; font-size: 1.5rem; font-style: italic; margin: 30px 0; line-height: 1.6; color: #fff; }
+        .personal-note {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.9rem;
+            color: #d4af37;
+            letter-spacing: 1px;
+            line-height: 1.8;
+            margin-bottom: 30px;
+            border-bottom: 1px solid #333;
+            padding-bottom: 20px;
+            text-transform: uppercase;
+        }
+
+        /* Şiir metni kutusunu genişlettik */
+        .poem-text { 
+            font-family: 'Playfair Display', serif; 
+            font-size: 1.4rem; 
+            font-style: italic; 
+            margin: 30px auto; 
+            line-height: 1.8; 
+            color: #fff;
+            min-height: 150px; /* Yazı kısa olsa bile yer kalsın */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
         
         .btn-main { 
             background: transparent; color: #fff; border: 1px solid #d4af37; 
@@ -51,8 +79,11 @@
     </div>
 
     <div id="mainContent">
-        <h1 style="font-size: 1.2rem; letter-spacing: 3px; color: #d4af37;">BİR AN...</h1>
-        <div id="poemDisplay" class="poem-text">"Sana bakmak bütün haftanın yorgunluğunu almak gibi..."</div>
+        <div class="personal-note">
+            ASLINDA SANA YAPTIĞIM SİTENİN İLK HALİ BU DEĞİLDİ NE KADAR SEVERSİN BİLMEM AMA SANA ÖZEL KEMAN BESTELERİ KEMAN NOTALARI OLAN BİR SİTE YAPMIŞTIM AMA SENİ DÜŞÜNÜNCE ÇOK MUTLU OLUYORUM NASIL TEPKİ VERECEĞİMİ NE DİYECEĞİMİ BEN BİLEMİYORUM O YÜZDEN SÖZLERİ ŞİİRLERE BIRAKMAK GELDİ AKLIMA
+        </div>
+
+        <div id="poemDisplay" class="poem-text">"Sen benim en güzel şiirim; okumaya doyamadığım, her kelimesinde kendimi bulduğum..."</div>
         
         <div>
             <button class="btn-small" onclick="changePoem()">Başka Şiire Geç</button>
@@ -60,16 +91,16 @@
         </div>
     </div>
 
-    <!-- DOSYA ADI SES.MP3 OLARAK BURADA TANIMLI -->
     <audio id="audio" loop src="ses.mp3"></audio>
 
     <script>
+        // Şiirleri daha anlamlı ve bütün seçtim
         const poems = [
-            "Sana bakmak bütün haftanın yorgunluğunu almak gibi.",
-            "Bir keman sesinde kaybolmak gibi seni sevmek...",
-            "Gece usulca yaklaşır, pişmanlıklar birikir. Anlarsın ki eksik kalan ne varsa dünyada, senin dokunduğun tellerdedir.",
-            "Ben seni unutmak için sevseydim, sana olan sevgimi kalbime gömerdim.",
-            "Bütün ince şeyler kısalıyor, geç kalındı sanki bir şeylere."
+            "Sen benim en güzel şiirim; okumaya doyamadığım, her kelimesinde kendimi bulduğum...",
+            "Belki de her şey, senin bir gülüşüne saklıymış. Ben, o gülüşün peşinde kaybolan bir yolcuyum sadece.",
+            "Seni sevmek, gökyüzüne bakıp yıldızları saymak gibi. Sonu yok ama her biri ayrı bir umut, ayrı bir parıltı.",
+            "Bazen sadece susmak gerekir. Kalp, kelimelerin bittiği yerde konuşmaya başlar; tıpkı bu keman sesi gibi.",
+            "Hayat kısa, dünya yorgun... Ama seninle geçen her an, benim için bir ömre bedel."
         ];
 
         const audio = document.getElementById('audio');
@@ -86,18 +117,16 @@
 
         function changePoem() {
             const display = document.getElementById('poemDisplay');
-            display.innerText = `"${poems[Math.floor(Math.random() * poems.length)]}"`;
+            // Yeni şiiri alırken fade animasyonu gibi bir etki için hafifçe bekletmek estetik durur
+            display.style.opacity = "0";
+            setTimeout(() => {
+                display.innerText = `"${poems[Math.floor(Math.random() * poems.length)]}"`;
+                display.style.opacity = "1";
+            }, 300);
         }
-
-        function toggleAudio() {
-            if (audio.paused) {
-                audio.play();
-                btnAudio.innerText = "Sesi Durdur";
-            } else {
-                audio.pause();
-                btnAudio.innerText = "Sesi Başlat";
-            }
-        }
+        
+        // CSS için gerekli geçiş ayarı
+        document.getElementById('poemDisplay').style.transition = "opacity 0.3s";
     </script>
 </body>
 </html>
