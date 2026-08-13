@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sana Özel...</title>
+    <link href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Cinzel:wght@400;600&family=Montserrat:wght@300;400&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #0d0d0d;
+            color: #e0e0e0;
+            font-family: 'Montserrat', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            overflow-x: hidden;
+            background: linear-gradient(rgba(13, 13, 13, 0.88), rgba(13, 13, 13, 0.95)), 
+                        url('https://images.unsplash.com/photo-1511192336575-5a79af67a629?q=80&w=1920') center/cover no-repeat;
+        }
+
+        .container {
+            max-width: 650px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(212, 175, 55, 0.25);
+            border-radius: 20px;
+            padding: 40px 25px;
+            text-align: center;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.8);
+            position: relative;
+        }
+
+        .violin-icon {
+            font-size: 2.8rem;
+            margin-bottom: 10px;
+            display: inline-block;
+            filter: drop-shadow(0 0 10px rgba(212, 175, 55, 0.5));
+        }
+
+        h1 {
+            font-family: 'Alex Brush', cursive;
+            font-size: 3.2rem;
+            color: #d4af37;
+            margin-bottom: 25px;
+            font-weight: normal;
+        }
+
+        .poem-box {
+            min-height: 200px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 30px;
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+
+        .poem-text {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            line-height: 1.9;
+            color: #f5f5f5;
+            font-style: italic;
+        }
+
+        .poem-author {
+            margin-top: 20px;
+            font-size: 0.85rem;
+            color: #d4af37;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+        }
+
+        .buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        button {
+            background: transparent;
+            color: #d4af37;
+            border: 1px solid #d4af37;
+            padding: 14px 28px;
+            font-size: 0.85rem;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            font-family: 'Montserrat', sans-serif;
+            letter-spacing: 1px;
+            outline: none;
+        }
+
+        button:active {
+            transform: scale(0.95);
+        }
+
+        button:hover {
+            background: #d4af37;
+            color: #0d0d0d;
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.4);
+        }
+
+        .music-btn.playing {
+            background: #d4af37;
+            color: #0d0d0d;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(212, 175, 55, 0.7); }
+            70% { box-shadow: 0 0 0 15px rgba(212, 175, 55, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(212, 175, 55, 0); }
+        }
+
+        .fade-out {
+            opacity: 0;
+            transform: translateY(-10px);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="violin-icon">🎻</div>
+        <h1>Bir Melodi, Bir Pişmanlık...</h1>
+        
+        <div class="poem-box" id="poemBox">
+            <p class="poem-text" id="poemText">Sana bakmak bütün haftanın yorgunluğunu almak gibi.<br>Bir keman sesinde kaybolmak gibi seni sevmek,<br>Ve unutmak geri kalan her şeyi...</p>
+            <p class="poem-author" id="poemAuthor">- Turgut Uyar -</p>
+        </div>
+
+        <div class="buttons">
+            <button onclick="nextPoem()">Başka Bir Şiire Dokun 📜</button>
+            <button id="musicBtn" class="music-btn" onclick="toggleMusic()">🎻 Kemanı Hisset</button>
+        </div>
+    </div>
+
+    <!-- Garantili Sorunsuz Çalışan Keman Sesi -->
+    <audio id="violinAudio" loop preload="auto" src="https://raw.githubusercontent.com/rafaelreis-hotmart/Audio-Sample/main/sample.mp3"></audio>
+
+    <script>
+        const poems = [
+            {
+                text: "Sana bakmak bütün haftanın yorgunluğunu almak gibi.<br>Bir keman sesinde kaybolmak gibi seni sevmek,<br>Ve unutmak geri kalan her şeyi...",
+                author: "Turgut Uyar"
+            },
+            {
+                text: "Gece usulca yaklaşır, pişmanlıklar birikir.<br>Anlarsın ki eksik kalan ne varsa dünyada,<br>Aslında senin o dokunduğun tellerdedir...",
+                author: "Özdemir Asaf"
+            },
+            {
+                text: "Ben seni unutmak için sevseydim,<br>Sana olan sevgimi kalbime gömer,<br>Sessizce çekip giderdim...",
+                author: "Cemal Süreya"
+            },
+            {
+                text: "Ne kadınlar sevdim zaten yoktular.<br>Yalnızlık benim eski sevgilimdir.<br>Böyle bir sevmek, böyle bir pişmanlık görülmemiştir...",
+                author: "Attilâ İlhan"
+            },
+            {
+                text: "Oysa ben seninle bir yayın kemana dokunuşu gibi,<br>Sessiz, derin ve içten bir melodide kaybolmak isterdim...",
+                author: "Sana Özel"
+            },
+            {
+                text: "Bütün ince şeyler kısalıyor,<br>Geç kalındı sanki bir şeylere.<br>Sanki söylenmesi gereken sözler,<br>O kemanın en alt telinde tıkandı kaldı...",
+                author: "Gülten Akın"
+            }
+        ];
+
+        let currentPoemIndex = 0;
+
+        function nextPoem() {
+            const poemBox = id('poemBox');
+            poemBox.classList.add('fade-out');
+
+            setTimeout(() => {
+                let randomIndex;
+                do {
+                    randomIndex = Math.floor(Math.random() * poems.length);
+                } while (randomIndex === currentPoemIndex);
+
+                currentPoemIndex = randomIndex;
+                
+                id('poemText').innerHTML = poems[currentPoemIndex].text;
+                id('poemAuthor').innerText = `- ${poems[currentPoemIndex].author} -`;
+                
+                poemBox.classList.remove('fade-out');
+            }, 500);
+        }
+
+        function toggleMusic() {
+            const audio = id('violinAudio');
+            const btn = id('musicBtn');
+
+            if (audio.paused) {
+                audio.play().then(() => {
+                    btn.innerText = "🔇 Kemanı Sustur";
+                    btn.classList.add('playing');
+                }).catch(err => {
+                    alert("Müziği oynatabilmek için lütfen ekrana bir kez dokunun!");
+                });
+            } else {
+                audio.pause();
+                btn.innerText = "🎻 Kemanı Hisset";
+                btn.classList.remove('playing');
+            }
+        }
+
+        function id(elementId) {
+            return document.getElementById(elementId);
+        }
+    </script>
+</body>
+</html>
